@@ -28,8 +28,11 @@ public class WordCounter implements Runnable {
             split = ",") // Split the option values by comma
     private List<String> filterWords = new ArrayList<>();
 
-    @Option(names = {"-e", "--encoding"}, description = "Character encoding (default: UTF-8)")
-    private String encoding = "UTF-8";
+    @Option(names = {"-ei", "--input-encoding"}, description = "Input character encoding (default: UTF-8)")
+    private String inputEncoding = "UTF-8";
+
+    @Option(names = {"-eo", "--output-encoding"}, description = "Output character encoding (default: UTF-8)")
+    private String outputEncoding = "UTF-8";
 
     @Option(names = {"-h", "--highlight"}, description = "Highlight words in Markdown format")
     private boolean highlight;
@@ -48,15 +51,20 @@ public class WordCounter implements Runnable {
                         .collect(Collectors.toList());
             }
 
-            // Read input file using the specified encoding
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), encoding));
+            // Read input file using the specified input encoding
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), inputEncoding));
             List<String> lines = reader.lines().collect(Collectors.toList());
             reader.close();
 
             // Initialize a word frequency map with all words from filterWords set to zero counts
             Map<String, Integer> wordCountMap = new TreeMap<>(caseSensitive ? String::compareTo : String::compareToIgnoreCase);
-            for (String word : filterWords) {
-                wordCountMap.put(word, 0);
+            if (filterWords.isEmpty()) {
+                // If no words are provided, count all words
+                //wordCountMap.put("", 0);
+            } else {
+                for (String word : filterWords) {
+                    wordCountMap.put(word, 0);
+                }
             }
 
             // Process lines and count words
@@ -66,8 +74,8 @@ public class WordCounter implements Runnable {
                     if (!caseSensitive) {
                         word = word.toLowerCase(); // Convert to lowercase if case sensitivity is disabled
                     }
-                    if (wordCountMap.containsKey(word)) {
-                        wordCountMap.put(word, wordCountMap.get(word) + 1);
+                    if (filterWords.isEmpty() || filterWords.contains(word)) {
+                        wordCountMap.put(word, wordCountMap.getOrDefault(word, 0) + 1);
                     }
                 }
             }
@@ -85,8 +93,8 @@ public class WordCounter implements Runnable {
                 outputFile = new File(outputFile.getParentFile(), outputFileName);
             }
 
-            // Write results to the output file
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), encoding));
+            // Write results to the output file using the specified output encoding
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), outputEncoding));
             for (Map.Entry<String, Integer> entry : wordCountMap.entrySet()) {
                 String word = entry.getKey();
                 int count = entry.getValue();

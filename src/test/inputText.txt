@@ -1,0 +1,3 @@
+This Is An Input Text Used As A Test. The Format Is In Camel Case.
+So It Does A good Test To Transform All In Lowercase Or Upercase.
+I add the following line to perform a test to count words in a text with mixed upercase and lowercase words. 

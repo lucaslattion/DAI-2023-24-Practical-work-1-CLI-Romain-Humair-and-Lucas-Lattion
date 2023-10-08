@@ -8,6 +8,8 @@ public class Main {
         long end = System.nanoTime();
         if(exitCode == 0){
             System.out.println("Success Execution ! Elapsed time: " + (end - start) / 1000000 + "ms / " + (end - start) + "ns");
+        } else {
+            System.out.println("something went wrong !");
         }
         System.exit(exitCode);
     }

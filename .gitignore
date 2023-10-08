@@ -54,3 +54,5 @@ todelete/
 
 # Except for test file
 !/src/test/inputText.txt
+!/src/test/inputTextUTF16LE.txt
+!/src/test/inputTextUTF16LEKorean.txt

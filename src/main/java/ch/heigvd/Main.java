@@ -1,10 +1,13 @@
 package ch.heigvd;
 import picocli.CommandLine;
-import picocli.CommandLine.Command;
 
 public class Main {
     public static void main(String[] args) {
-        new CommandLine(new HelloWorldCommand()).execute(args);
-        //System.out.println("Hello world!");
+        //new CommandLine(new HelloWorldCommand()).execute(args);
+        //int exitCode = new CommandLine(new HelloNameCommand()).execute(args);
+        //int exitCode = new CommandLine(new TextTransformer()).execute(args);
+        int exitCode = new CommandLine(new WordCounter()).execute(args);
+        //int exitCode = new CommandLine(new WordProcessor()).execute(args);
+        System.exit(exitCode);
     }
 }

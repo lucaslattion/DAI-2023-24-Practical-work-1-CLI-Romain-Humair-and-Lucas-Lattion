@@ -41,13 +41,23 @@ public class WordCounter implements Runnable {
     @Override
     public void run() {
         try {
+            // Convert filterWords to lowercase if case sensitivity is disabled
+            if (!caseSensitive) {
+                filterWords = filterWords.stream()
+                        .map(String::toLowerCase)
+                        .collect(Collectors.toList());
+            }
+
             // Read input file using the specified encoding
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), encoding));
             List<String> lines = reader.lines().collect(Collectors.toList());
             reader.close();
 
-            // Initialize a word frequency map
+            // Initialize a word frequency map with all words from filterWords set to zero counts
             Map<String, Integer> wordCountMap = new TreeMap<>(caseSensitive ? String::compareTo : String::compareToIgnoreCase);
+            for (String word : filterWords) {
+                wordCountMap.put(word, 0);
+            }
 
             // Process lines and count words
             for (String line : lines) {
@@ -56,8 +66,8 @@ public class WordCounter implements Runnable {
                     if (!caseSensitive) {
                         word = word.toLowerCase(); // Convert to lowercase if case sensitivity is disabled
                     }
-                    if (filterWords.isEmpty() || filterWords.contains(word)) {
-                        wordCountMap.put(word, wordCountMap.getOrDefault(word, 0) + 1);
+                    if (wordCountMap.containsKey(word)) {
+                        wordCountMap.put(word, wordCountMap.get(word) + 1);
                     }
                 }
             }
@@ -108,6 +118,7 @@ public class WordCounter implements Runnable {
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
             CommandLine.usage(this, System.out);
+
         }
     }
 }

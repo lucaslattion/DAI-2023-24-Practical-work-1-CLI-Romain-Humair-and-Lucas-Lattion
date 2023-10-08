@@ -118,7 +118,6 @@ public class WordCounter implements Runnable {
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
             CommandLine.usage(this, System.out);
-
         }
     }
 }

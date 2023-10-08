@@ -13,7 +13,7 @@ Only one input file can be processed at a time.
 Is it possible to activate case-sensitive search, change text encoding, filter words to count or hightlight them   
 
 
-# How to build the  CLI
+# How to build the  CLI-
 
 first, clone the repository.
 
@@ -42,7 +42,8 @@ Check the [Examples](#Examples) for more details.
 <inputFile>                                     Input file path
 <outputFile>                                    Output file path
 -c, --case-sensitive                            Enable case sensitivity
--e, --encoding=<encoding>                       Character encoding (default: UTF-8)
+-ei, --input-encoding=<inputEncoding>           Input character encoding (default: UTF-8)
+-eo, --output-encoding=<outputEncoding>         Output character encoding (default: UTF-8)
 -h, --highlight                                 Highlight words in Markdown format
 -w, --words=<filterWords>[,<filterWords>...]    List of words to filter/count
 ```

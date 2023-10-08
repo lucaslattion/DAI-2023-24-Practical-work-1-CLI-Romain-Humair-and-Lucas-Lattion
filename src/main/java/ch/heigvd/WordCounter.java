@@ -69,7 +69,7 @@ public class WordCounter implements Runnable {
 
             // Process lines and count words
             for (String line : lines) {
-                String[] words = line.split("\\W+"); // Split by non-word characters
+                String[] words = line.split("[ .,?!]"); // Split by non-word characters
                 for (String word : words) {
                     if (!caseSensitive) {
                         word = word.toLowerCase(); // Convert to lowercase if case sensitivity is disabled

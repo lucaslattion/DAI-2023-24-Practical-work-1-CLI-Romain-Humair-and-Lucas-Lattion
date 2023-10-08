@@ -39,3 +39,15 @@ Thumbs.db
 
 # Folder config file
 [Dd]esktop.ini
+
+# To delete
+todelete/
+
+# Generated test output file
+*.txt
+
+# Ignore all .md files
+*.md
+
+# Except for README.md
+!README.md

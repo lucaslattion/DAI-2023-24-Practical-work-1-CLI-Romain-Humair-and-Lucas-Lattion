@@ -6,6 +6,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.regex.Matcher;
@@ -28,8 +29,11 @@ public class WordCounter implements Runnable {
             split = ",") // Split the option values by comma
     private List<String> filterWords = new ArrayList<>();
 
-    @Option(names = {"-e", "--encoding"}, description = "Character encoding (default: UTF-8)")
-    private String encoding = "UTF-8";
+    @Option(names = {"-ei", "--input-encoding"}, description = "Input character encoding (default: UTF-8)")
+    private String inputEncoding = "UTF-8";
+
+    @Option(names = {"-eo", "--output-encoding"}, description = "Output character encoding (default: UTF-8)")
+    private String outputEncoding = "UTF-8";
 
     @Option(names = {"-h", "--highlight"}, description = "Highlight words in Markdown format")
     private boolean highlight;
@@ -48,8 +52,8 @@ public class WordCounter implements Runnable {
                         .collect(Collectors.toList());
             }
 
-            // Read input file using the specified encoding
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), encoding));
+            // Read input file using the specified input encoding
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), inputEncoding));
             List<String> lines = reader.lines().collect(Collectors.toList());
             reader.close();
 
@@ -85,8 +89,8 @@ public class WordCounter implements Runnable {
                 outputFile = new File(outputFile.getParentFile(), outputFileName);
             }
 
-            // Write results to the output file
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), encoding));
+            // Write results to the output file using the specified output encoding
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), outputEncoding));
             for (Map.Entry<String, Integer> entry : wordCountMap.entrySet()) {
                 String word = entry.getKey();
                 int count = entry.getValue();
@@ -118,7 +122,6 @@ public class WordCounter implements Runnable {
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
             CommandLine.usage(this, System.out);
-
         }
     }
 }

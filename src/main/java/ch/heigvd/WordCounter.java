@@ -6,7 +6,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.regex.Matcher;
@@ -59,8 +58,13 @@ public class WordCounter implements Runnable {
 
             // Initialize a word frequency map with all words from filterWords set to zero counts
             Map<String, Integer> wordCountMap = new TreeMap<>(caseSensitive ? String::compareTo : String::compareToIgnoreCase);
-            for (String word : filterWords) {
-                wordCountMap.put(word, 0);
+            if (filterWords.isEmpty()) {
+                // If no words are provided, count all words
+                //wordCountMap.put("", 0);
+            } else {
+                for (String word : filterWords) {
+                    wordCountMap.put(word, 0);
+                }
             }
 
             // Process lines and count words
@@ -70,8 +74,8 @@ public class WordCounter implements Runnable {
                     if (!caseSensitive) {
                         word = word.toLowerCase(); // Convert to lowercase if case sensitivity is disabled
                     }
-                    if (wordCountMap.containsKey(word)) {
-                        wordCountMap.put(word, wordCountMap.get(word) + 1);
+                    if (filterWords.isEmpty() || filterWords.contains(word)) {
+                        wordCountMap.put(word, wordCountMap.getOrDefault(word, 0) + 1);
                     }
                 }
             }

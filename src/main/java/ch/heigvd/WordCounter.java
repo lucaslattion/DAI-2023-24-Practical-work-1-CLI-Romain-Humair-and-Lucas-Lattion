@@ -65,10 +65,8 @@ public class WordCounter implements Runnable {
 
             // Initialize a word frequency map with all words from filterWords set to zero counts
             Map<String, Integer> wordCountMap = new TreeMap<>(caseSensitive ? String::compareTo : String::compareToIgnoreCase);
-            if (filterWords.isEmpty()) {
-                // If no words are provided, count all words
-                //wordCountMap.put("", 0);
-            } else {
+            if (!filterWords.isEmpty()) {
+                // Add all words to the filter with count 0.
                 for (String word : filterWords) {
                     wordCountMap.put(word, 0);
                 }
@@ -95,12 +93,8 @@ public class WordCounter implements Runnable {
                     writer.write(word + ": " + count + "\n"); // Add a colon between word and count
                 }
 
-                // Perform highlighting if requested
-                if (highlight && !filterWords.isEmpty()) {
-
-                }
                 writer.flush();
-                System.out.println("success write : " + outputFile);
+                System.out.println("Success write : " + outputFile);
             } catch (IOException e) {
                 System.err.println("Exception in text writer: " + e.getMessage());
                 System.exit(1);
@@ -141,7 +135,7 @@ public class WordCounter implements Runnable {
                             writer.write(highlightedLine.toString() + "\n");
                         }
                         writer.flush();
-                        System.out.println("success write : " + outputFile);
+                        System.out.println("Success write : " + outputFile);
                     } catch (IOException e) {
                         System.err.println("Exception in markdown writer: " + e.getMessage());
                         System.exit(1);

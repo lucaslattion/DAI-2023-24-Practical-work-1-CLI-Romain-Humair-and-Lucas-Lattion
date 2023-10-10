@@ -4,13 +4,14 @@
 * Romain Humair
 
 # CLI
-Our CLI can count words from a text file.
+Our CLI can count words from a text file and/or highlight a list of selected words.
+
 By default, the output file will contain all words and their number of appearances in input file.
-Input file is limited to .txt or .md files.
+It is possible to activate case-sensitive search (```-c```), change text encoding (```-e```, ```-ei```, ```-eo```), filter words to count (```-w```) or highlight them (```-h```).
+
+If the highlight (```-h```) option is selected, a markdown (.md) file will be generated in addition to the specified output file
+
 Only one input file can be processed at a time.
-
-Is it possible to activate case-sensitive search, change text encoding, filter words to count or hightlight them   
-
 
 # How to build the  CLI-
 
@@ -24,12 +25,12 @@ Then, you have two possibilities to build the jar file:
    3. ```mvn dependency:resolve clean compile package```
 
    
-JAR file will be generated the /target/ folder
+JAR file will be generated in the /target/ folder
 
 
 # How to use the CLI
 
-minimum parameter are inputFile and outputFile
+minimum parameters are inputFile and outputFile
 
 ```java -jar Search-CLI-1.0-SNAPSHOT.jar <inputFile> <outputFile> -c```
 
@@ -41,10 +42,11 @@ Check the [Examples](#Examples) for more details.
 <inputFile>                                     Input file path
 <outputFile>                                    Output file path
 -c, --case-sensitive                            Enable case sensitivity
--ei, --input-encoding=<inputEncoding>           Input character encoding (default: UTF-8)
--eo, --output-encoding=<outputEncoding>         Output character encoding (default: UTF-8)
+-e, --encoding=<encoding>                       Input and output character encoding (default: UTF-8) (priority over -ei and -eo)
+   -ei, --input-encoding=<inputEncoding>        Input character encoding (default: UTF-8)
+   -eo, --output-encoding=<outputEncoding>      Output character encoding (default: UTF-8)
 -h, --highlight                                 Highlight words in Markdown format
--w, --words=<filterWords>[,<filterWords>...]    List of words to filter/count
+-w, --words=<filterWords>[,<filterWords>...]    List of words to count/highlight
 ```
 
 <h1 id="Examples">
@@ -61,11 +63,12 @@ I add the following line to perform a test to count words in a text with mixed u
 ```
 
 ## Word count
-You can test the CLI with this example : ```java -jar Search-CLI-1.0-SNAPSHOT.jar src/test/inputText.txt src/test/output.txt -w This,Test,FoLLoWing```
+You can test the CLI with this example : 
+```java -jar Search-CLI-1.0-SNAPSHOT.jar src/test/inputText.txt src/test/output.txt -w This,Test,FoLLoWing```
 
-feel free to change the 3 filter word ```This,Test,FoLLoWing```.
+feel free to change the filter words ```This,Test,FoLLoWing```.
 
-Here are the result without the ```-c``` option :
+Here the result without the ```-c``` option :
 ```
 following: 1
 test: 3
@@ -80,9 +83,12 @@ This: 1
 ```
 
 ## Word highlight
-You can also highlight word in a markdown format with the option ```-h```. Filter Words  set with ```-w``` will be highlighted in a markdown output file (.md).
+You can also highlight word in a markdown format with the option ```-h```. Filter Words  set with ```-w``` will be highlighted in a markdown output file (.md) :
+
 ```java -jar Search-CLI-1.0-SNAPSHOT.jar inputText.txt output.txt -w This,Test,FoLLoWing -h```
 
+
+an output file with a .md extension will be generated. Name is the same as the ```<outputFile>``` name parameter.
 ```
 **This** Is An Input Text Used As A **Test**. The Format Is In Camel Case.
 So It Does A good **Test** To Transform All In Lowercase Or Upercase.
@@ -95,7 +101,8 @@ There are 2 others input files, both with an UTF-16 encoding: (UTF-16LE)
 * [inputTextUTF16LE.txt](/src/test/inputTextUTF16LE.txt)
 * [inputTextUTF16LEKorean.txt](/src/test/inputTextUTF16LEKorean.txt)
 
-Here an example with the text in Korean : ```java -jar Search-CLI-1.0-SNAPSHOT.jar src/test/inputTextUTF16LEKorean.txt src/test/output.txt -ei UTF-16LE -eo UTF-16LE```
+Here an example with the text in Korean : ```java -jar Search-CLI-1.0-SNAPSHOT.jar src/test/inputTextUTF16LEKorean.txt src/test/output.txt -ei UTF-16LE -eo UTF-16LE```.
+If both input and output files have the same encoding, you can use ```-e``` instead of ```-ei``` and ```-eo```
 
 ```
 in: 1
